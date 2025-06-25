@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio • Rachid Tazi</title>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav id="navbar" class="container">
+        <a href="#" class="logo">RachidTazi<span class="accent">.</span></a>
+        <button id="nav-toggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><button id="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="hero" class="container">
+        <h1>Hello, I'm <span class="accent">Rachid Tazi</span></h1>
+        <p class="subtitle">
+          Bachelor student in mathematics and computer science at École Polytechnique, Paris.
+          Passionate about everything related to computing.
+        </p>
+        <a href="https://github.com/Rach0o0/Portfolio/tree/main" class="btn primary">View my projects</a>
+      </section>
+
+      <section id="about" class="container section">
+        <h2>About</h2>
+        <p>
+          I'm a 20-year-old student from Morocco, currently enrolled in the Bachelor program at
+          École Polytechnique in Paris, where I study mathematics and computer science. I use this
+          website to showcase the various projects I'm involved in — from academic work to personal
+          experiments and collaborations. This site is regularly updated as I continue to explore
+          new technologies and ideas.
+        </p>
+      </section>
+
+      <section id="projects" class="container section">
+        <h2>Projects</h2>
+
+        <!-- Slide counter -->
+        <div id="slide-counter" class="slide-counter">1 / 6</div>
+
+        <!-- Project cards will be dynamically inserted here -->
+        <div id="projects-slider" class="container"></div>
+      </section>
+
+      <section id="skills" class="container section">
+        <h2>Skills</h2>
+        <ul id="skills-list" class="skills-list">
+          <!-- Skills will be dynamically inserted by script.js -->
+        </ul>
+      </section>
+
+    </main>
+
+    <footer class="container">
+      <p>© <span id="year"></span> Rachid Tazi. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
