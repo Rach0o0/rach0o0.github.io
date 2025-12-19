@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Session 3 — Texture Mapping</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header class="subpage-header">
+    <h1>Session 3 — Texture Mapping</h1>
+    <p>
+      In this session we make surfaces look more realistic by adding texture detail. 
+      We load an image on the GPU, compute texture coordinates on geometry, look up colors from the texture, and use anti aliasing to reduce artifacts.
+    </p>
+  </header>
+
+  <main class="session-content">
+
+    <!-- Exercise 1 -->
+    <section class="exercise" id="w3-ex1">
+      <h2>Exercise 1 — Texture loading and sampling</h2>
+
+      <p>
+        In this exercise, I added support for loading an image file as a GPU texture
+        without color space conversion.
+        The texture is rendered directly using image plane (uv) coordinates.
+      </p>
+
+      <p>
+        I implemented different texture addressing modes (<b>clamp-to-edge</b> and <b>repeat</b>)
+        and filtering modes (<b>nearest</b> and <b>linear</b>), and added a simple interface
+        to switch between them at runtime.
+      </p>
+
+      <img src="images/w3_ex1.png" alt="Worksheet 3 Exercise 1 result"/>
+
+      <p>
+        Source code:
+        <a href="https://github.com/Rach0o0/Rendering-class/tree/main/Session3/1" target="_blank">
+          GitHub – Worksheet 3 / Exercise 1
+        </a>
+      </p>
+    </section>
+
+
+    <!-- Exercise 2 -->
+    <section class="exercise" id="w3-ex2">
+      <h2>Exercise 2 — Texture mapping on the plane</h2>
+
+      <p>
+        In this exercise, I mapped the loaded texture onto the plane of the default scene.
+        Texture lookup was moved to the intersection stage by extending the <code>HitInfo</code>
+        structure with texture coordinates.
+      </p>
+
+      <p>
+        Texture coordinates are computed using inverse mapping based on an orthonormal
+        basis (tangent, binormal, normal) of the plane.
+        A texture scaling factor is applied, and an interface allows texturing to be
+        enabled or disabled.
+      </p>
+
+      <img src="images/w3_ex2.png" alt="Worksheet 3 Exercise 2 result"/>
+
+      <p>
+        Source code:
+        <a href="https://github.com/Rach0o0/Rendering-class/tree/main/Session3/2" target="_blank">
+          GitHub – Worksheet 3 / Exercise 2
+        </a>
+      </p>
+    </section>
+
+
+    <!-- Exercise 3 -->
+    <section class="exercise" id="w3-ex3">
+      <h2>Exercise 3 — Stratified jitter sampling</h2>
+
+      <p>
+        This exercise adds stratified jitter sampling for anti-aliasing.
+        Each pixel is subdivided into multiple sub-pixels, and a ray is cast
+        through each jittered sample position.
+      </p>
+
+      <p>
+        Jitter offsets are computed in JavaScript and stored in a GPU storage buffer.
+        The fragment shader accumulates the radiance from all sub-pixels and averages
+        the result.
+        An interface allows changing the pixel subdivision level interactively.
+      </p>
+
+      <img src="images/w3_ex3.png" alt="Worksheet 3 Exercise 3 result"/>
+
+      <p>
+        Source code:
+        <a href="https://github.com/Rach0o0/Rendering-class/tree/main/Session3/3" target="_blank">
+          GitHub – Worksheet 3 / Exercise 3
+        </a>
+      </p>
+    </section>
+
+
+    <!-- Exercise 4 -->
+    <section class="exercise" id="w3-ex4">
+      <h2>Exercise 4 — Texture scaling and aliasing</h2>
+
+      <p>
+        In the final exercise, I extended the interface to control the texture
+        scaling factor, allowing the texture to be magnified by a factor from 1 to 10.
+      </p>
+
+      <p>
+        The interface now supports toggling texturing, texture address mode,
+        filtering mode, pixel subdivision level, and gamma correction.
+        Different configurations were used to observe texture aliasing effects
+        and the impact of filtering and anti-aliasing.
+      </p>
+
+      <img src="images/w3_ex4.png" alt="Worksheet 3 Exercise 4 result"/>
+
+      <p>
+        Source code:
+        <a href="https://github.com/Rach0o0/Rendering-class/tree/main/Session3/4" target="_blank">
+          GitHub – Worksheet 3 / Exercise 4
+        </a>
+      </p>
+    </section>
+
+
+  </main>
+
+  <footer>
+    <a class="back" href="index.html">← Back to Home</a>
+  </footer>
+</body>
+</html>

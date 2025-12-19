@@ -26,6 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const projects = [
       {
+        title: "Rendering projects",
+        link: "projects/journal/index.html",
+        image: "images/rendering.png"
+      },
+      {
         title: "Chess Move Predictor",
         link: "projects/chess.html",
         image: "images/chess.jpeg"
