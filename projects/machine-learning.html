@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning Projects — Rachid Tazi</title>
+<meta name="description" content="Two machine learning projects: environmental audio classification on ESC-50, and vessel trajectory forecasting & anomaly detection on AIS data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .hero-case{ min-height:auto; padding-top:140px; padding-bottom:20px; }
+  .hero-case .corner{ top:100px; }
+  .subcase-tag{ display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--accent); background:var(--surface-2); padding:6px 14px; border-radius:999px; margin-bottom:18px; }
+  .divider-line{ height:1px; background:var(--line); margin:0 0 100px; }
+  .role-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+  .role-chip{ display:flex; flex-direction:column; gap:2px; padding:12px 16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }
+  .role-chip.me{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .role-chip .rn{ font-size:13px; font-weight:600; }
+  .role-chip .rt{ font-size:11.5px; color:var(--muted); }
+  .compare-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .compare-card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px; text-align:center; }
+  .compare-card.best{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .compare-card .cm-label{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .compare-card .cm-value{ font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:600; margin-top:8px; color:var(--ink); }
+  .compare-card.best .cm-value{ color:var(--accent); }
+  .compare-card .cm-note{ font-size:11.5px; color:var(--muted); margin-top:6px; }
+  @media (max-width:800px){ .compare-grid{ grid-template-columns:1fr 1fr; } }
+
+  .exp-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .exp-card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px; }
+  .exp-card .ek{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; }
+  .exp-card h4{ font-size:15px; margin:8px 0 6px; }
+  .exp-card p{ font-size:12.5px; color:var(--muted); line-height:1.5; }
+  @media (max-width:800px){ .exp-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:500px){ .exp-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-pill">
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#skills">Skills</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#experience">Journey</a>
+  <a href="../index.html#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
+
+<header class="hero hero-case">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <a href="../index.html#projects" class="back-link reveal">← Back to portfolio</a>
+    <div class="eyebrow reveal">Case study 02 — Machine Learning</div>
+    <h1 class="reveal" style="font-size:clamp(32px,5.2vw,56px); max-width:900px;">Two ML projects: from sound to sea</h1>
+    <p class="lead reveal" style="max-width:700px;">Two coursework projects tackling very different sequential-data problems: classifying environmental sounds, and forecasting vessel trajectories at sea to flag unusual behaviour.</p>
+    <div class="case-meta reveal">
+      <div class="meta-chip"><span class="k">Course A</span><span class="v">Machine Learning — Polytechnique</span></div>
+      <div class="meta-chip"><span class="k">Course B</span><span class="v">Deep Learning — DTU</span></div>
+      <div class="meta-chip"><span class="k">Team size</span><span class="v">3 people each</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== PROJECT A : ESC-50 ========== -->
+<section style="padding-top:40px;">
+  <div class="wrap">
+    <div class="subcase-tag reveal">01 — Audio Classification</div>
+    <h2 class="section-title reveal">Environmental sound classification on ESC-50</h2>
+    <p class="section-sub reveal" style="max-width:720px;">
+      The goal was to classify 2,000 short environmental sound clips (50 classes — barking dogs, rain, chainsaws, and more) by comparing a convolutional network trained from scratch against transfer learning from a pretrained audio encoder.
+    </p>
+
+    <div class="role-row reveal" style="margin-bottom:48px;">
+      <div class="role-chip"><span class="rn">Sirui Sun</span><span class="rt">Data preprocessing · Baseline · CNN</span></div>
+      <div class="role-chip"><span class="rn">Eugenio</span><span class="rt">Experimental comparison · Evaluation</span></div>
+      <div class="role-chip me"><span class="rn">Rachid (me)</span><span class="rt">Pretrained encoder · Fine-tuning · Feature extraction</span></div>
+    </div>
+
+    <div class="eyebrow reveal">Results</div>
+    <h3 class="reveal" style="font-size:20px; margin-bottom:20px;">Transfer learning won, clearly</h3>
+    <div class="compare-grid reveal" style="margin-bottom:20px;">
+      <div class="compare-card">
+        <span class="cm-label">Logistic Regression</span>
+        <div class="cm-value">6%</div>
+        <div class="cm-note">raw-feature baseline</div>
+      </div>
+      <div class="compare-card">
+        <span class="cm-label">Random Forest</span>
+        <div class="cm-value">21%</div>
+        <div class="cm-note">raw-feature baseline</div>
+      </div>
+      <div class="compare-card">
+        <span class="cm-label">CNN from scratch</span>
+        <div class="cm-value">60.5%</div>
+        <div class="cm-note">~99% train acc. — overfit</div>
+      </div>
+      <div class="compare-card best">
+        <span class="cm-label">OpenL3 + fine-tuning</span>
+        <div class="cm-value">Best</div>
+        <div class="cm-note">fewer params, more robust</div>
+      </div>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:56px;">
+      My part of the project was the transfer-learning branch: extracting 512-dimensional embeddings from <strong>OpenL3</strong> (an encoder pretrained on unlabeled YouTube audio-visual data), and testing how far those embeddings could go. Even a simple logistic regression on top of raw OpenL3 embeddings comfortably beat the from-scratch CNN. I then fine-tuned the last 10 and 15 layers of the encoder, which gave modest but consistent extra accuracy, confirming that pretrained audio representations generalize well even in a low-resource, 50-class setting. The from-scratch CNN — built with asymmetric convolution kernels (wide in frequency, narrow in time) to better capture spectral patterns — still overfit despite pushing training samples from 2,000 to over 14,000 through segmentation and augmentation.
+    </p>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider-line"></div></div>
+
+<!-- ========== PROJECT B : AIS ========== -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="subcase-tag reveal">02 — Trajectory Forecasting</div>
+    <h2 class="section-title reveal">Vessel trajectory forecasting &amp; anomaly detection on AIS data</h2>
+    <p class="section-sub reveal" style="max-width:720px;">
+      A recurrent model that learns normal vessel movement from AIS (Automatic Identification System) data, then uses its own prediction error as an anomaly score to flag unusual behaviour at sea.
+    </p>
+
+    <div class="role-row reveal" style="margin-bottom:48px;">
+      <div class="role-chip me"><span class="rn">Rachid (me)</span><span class="rt">Shared across the pipeline</span></div>
+      <div class="role-chip"><span class="rn">Marc Saade</span><span class="rt">Team member</span></div>
+      <div class="role-chip"><span class="rn">Florian Küfner</span><span class="rt">Team member</span></div>
+    </div>
+
+    <div class="eyebrow reveal">Pipeline</div>
+    <h3 class="reveal" style="font-size:20px; margin-bottom:16px;">From raw AIS logs to a trained model</h3>
+    <div class="diagram-wrap reveal" style="margin-bottom:48px;">
+      <svg viewBox="0 0 1080 170" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:'JetBrains Mono',monospace;">
+        <line x1="80" y1="85" x2="1000" y2="85" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 6"></line>
+        <g>
+          <rect x="20" y="60" width="120" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="80" y="90" text-anchor="middle" font-size="11" fill="var(--ink)">Raw AIS CSV</text>
+          <text x="80" y="132" text-anchor="middle" font-size="10" fill="var(--muted)">per-vessel logs</text>
+        </g>
+        <g>
+          <rect x="220" y="60" width="130" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="285" y="90" text-anchor="middle" font-size="11" fill="var(--ink)">Parquet + resample</text>
+          <text x="285" y="132" text-anchor="middle" font-size="10" fill="var(--muted)">60s intervals</text>
+        </g>
+        <g>
+          <rect x="430" y="60" width="130" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="495" y="90" text-anchor="middle" font-size="11" fill="var(--ink)">Feature engineering</text>
+          <text x="495" y="132" text-anchor="middle" font-size="10" fill="var(--muted)">XY, ΔXY, sin/cos COG</text>
+        </g>
+        <g>
+          <rect x="640" y="60" width="120" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="700" y="90" text-anchor="middle" font-size="11" fill="var(--ink)">Windowing</text>
+          <text x="700" y="132" text-anchor="middle" font-size="10" fill="var(--muted)">29 in → 1 target</text>
+        </g>
+        <g>
+          <rect x="840" y="55" width="130" height="60" rx="12" fill="var(--ink)" stroke="var(--accent)" stroke-width="2"></rect>
+          <text x="905" y="88" text-anchor="middle" font-size="11" fill="var(--bg)">LSTM / GRU</text>
+          <text x="905" y="137" text-anchor="middle" font-size="10" fill="var(--accent)">next-step + anomaly score</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="eyebrow reveal">Experiments</div>
+    <h3 class="reveal" style="font-size:20px; margin-bottom:16px;">Four conditions, same model</h3>
+    <p class="section-sub reveal" style="max-width:720px;">To isolate what actually affects prediction quality, the same single-layer LSTM (128 hidden units) was trained independently on four combinations of season and vessel type, with identical splits, optimizer, and epoch budget.</p>
+    <div class="exp-grid reveal" style="margin-bottom:20px;">
+      <div class="exp-card"><span class="ek">Winter</span><h4>Cargo</h4><p>Narrow corridors (e.g. Öresund) → low, stable prediction error.</p></div>
+      <div class="exp-card"><span class="ek">Winter</span><h4>Fishing</h4><p>Dense cluster off north Jutland → low error except for rare outlier trips.</p></div>
+      <div class="exp-card"><span class="ek">Summer</span><h4>Cargo</h4><p>Same open-sea effect: error grows with distance from the coast.</p></div>
+      <div class="exp-card"><span class="ek">Summer</span><h4>Fishing</h4><p>Consistent with winter — geography matters more than season here.</p></div>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:56px;">
+      Training was stable across all four runs — loss dropped smoothly from ~6×10⁻³ to 3.4–3.6×10⁻³ with no overfitting. The clearest pattern wasn't season, but geography and constraint: vessels in narrow, well-defined corridors were far easier to predict than those in open water, where speed and behavioural variance are higher. Fishing vessels, expected to be the harder case due to erratic movement, actually turned out easier overall — most activity stayed within a small, densely-sampled area, and it was the rare isolated trips that produced the largest errors. That residual — the gap between predicted and actual position — is exactly what the model uses as its anomaly score.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal">
+    <div class="contact-card">
+      <h2>Want to see the code or the full reports?</h2>
+      <p>Both projects are open on GitHub, with full write-ups and reproducible pipelines.</p>
+      <div class="contact-actions">
+        <a href="https://github.com/Sirui97/ML-Project" class="btn btn-primary" target="_blank" rel="noopener">↗ ESC-50 repo</a>
+        <a href="https://github.com/florian924/DeepLearningGroup77" class="btn btn-primary" target="_blank" rel="noopener">↗ AIS repo</a>
+        <a href="../index.html#projects" class="btn btn-ghost">← Back to projects</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Rachid Tazi — built with care.</footer>
+
+<script>
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => root.classList.toggle('dark'));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

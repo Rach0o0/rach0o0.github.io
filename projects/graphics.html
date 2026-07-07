@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Graphics Coursework | Rachid Tazi</title>
+<meta name="description" content="Two computer graphics courses: a WebGPU ray tracer with cinematic camera effects (DTU), and a C++ path tracer plus fluid simulation via optimal transport (École Polytechnique).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .hero-case{ min-height:auto; padding-top:140px; padding-bottom:20px; }
+  .hero-case .corner{ top:100px; }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-pill">
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#skills">Skills</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#experience">Journey</a>
+  <a href="../index.html#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
+
+<header class="hero hero-case">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <a href="../index.html#projects" class="back-link reveal">← Back to portfolio</a>
+    <div class="eyebrow reveal">Case study 03 · Computer Graphics</div>
+    <h1 class="reveal" style="font-size:clamp(32px,5.2vw,56px); max-width:900px;">Two courses, one obsession: rendering light</h1>
+    <p class="lead reveal" style="max-width:700px;">A WebGPU ray tracer built week by week at DTU, and a from-scratch C++ path tracer and fluid simulator at École Polytechnique: two very different routes into the same field.</p>
+    <div class="case-meta reveal">
+      <div class="meta-chip"><span class="k">Course A</span><span class="v">Rendering, DTU</span></div>
+      <div class="meta-chip"><span class="k">Course B</span><span class="v">Computer Graphics, Polytechnique</span></div>
+      <div class="meta-chip"><span class="k">Stack</span><span class="v">WGSL / JS / C++</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== COURSE A: DTU RENDERING ========== -->
+<section style="padding-top:40px;">
+  <div class="wrap">
+    <div class="subcase-tag reveal">01 · Rendering (DTU, WebGPU)</div>
+    <h2 class="section-title reveal">A ray tracer, built one worksheet at a time</h2>
+    <p class="section-sub reveal" style="max-width:720px;">
+      Ten weekly worksheets, each adding a new rendering concept on top of a WebGPU-based ray tracer, from the first ray-sphere intersection to progressive path tracing, acceleration structures, Fresnel materials, and HDR environment lighting. The course closed with an open-ended final project.
+    </p>
+
+    <div class="eyebrow reveal">Weekly progress</div>
+    <div class="week-strip reveal" style="margin-bottom:56px;">
+      <div class="week-card"><img src="../assets/graphics/dtu_w2.png" alt="Shadows and reflections"><div class="wk-label"><div class="wk-num">WEEK 2</div><div class="wk-title">Shadows &amp; Reflections</div></div></div>
+      <div class="week-card"><img src="../assets/graphics/dtu_w9.png" alt="Environment maps"><div class="wk-label"><div class="wk-num">WEEK 9</div><div class="wk-title">Environment Maps &amp; HDR</div></div></div>
+      <div class="week-card"><img src="../assets/graphics/dtu_w10.png" alt="Production rendering in Blender"><div class="wk-label"><div class="wk-num">WEEK 10</div><div class="wk-title">Production Rendering (Blender)</div></div></div>
+      <div class="week-card" style="display:flex; align-items:center; justify-content:center; text-align:center; padding:16px;">
+        <a href="rendering-journal/index.html" target="_blank" rel="noopener" style="font-size:12.5px; color:var(--accent); font-family:'JetBrains Mono',monospace;">→ Browse the full<br>10-week journal</a>
+      </div>
+    </div>
+
+    <div class="eyebrow reveal">Final project</div>
+    <h3 class="reveal" style="font-size:22px; margin-bottom:8px;">Cinematic Camera Effects for Game-Style Rendering</h3>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:28px;">
+      The final project shifted focus away from geometry and onto the camera itself: a single Stanford bunny, floating in a dark backdrop, lit by glowing procedural orbs, built to explore how cinematography techniques (depth of field, focus pulls, dolly shots) can carry a scene the way they do in game cutscenes, all rendered in real time.
+    </p>
+
+    <div class="shot-grid reveal" style="margin-bottom:24px;">
+      <div class="shot wide"><img src="../assets/graphics/dtu_dof.png" alt="Thin lens depth of field"><div class="cap">Thin-lens depth of field: sharp focal plane, dreamy blur beyond it</div></div>
+      <div class="shot"><img src="../assets/graphics/dtu_refraction.png" alt="Glass refraction and absorption"><div class="cap">Glass shells with Snell's law refraction + Beer–Lambert absorption</div></div>
+      <div class="shot"><img src="../assets/graphics/dtu_caustic.png" alt="Fake caustics"><div class="cap">Fake caustics: concentrated light without full light transport</div></div>
+      <div class="shot"><img src="../assets/graphics/dtu_orb.gif" alt="Procedural emissive orb animation"><div class="cap">Procedural emissive orbs, animated with sinusoidal noise</div></div>
+      <div class="shot wide"><img src="../assets/graphics/dtu_dolly.gif" alt="Cinematic dolly shot"><div class="cap">Smooth dolly shot: camera path eased over time, no jerkiness</div></div>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:16px;">
+      Technically, everything runs inside a single full-screen fragment shader: primary rays originate from random points on a thin-lens disk rather than a pinhole, glass materials combine Fresnel reflection with exponential Beer–Lambert absorption, and a cheap fake-caustics term adds focused highlights to diffuse surfaces without simulating real light transport. The original plan used the more complex Bitterli dragon model, but it proved too heavy to path-trace interactively. Swapping to the Stanford bunny was a deliberate trade-off between scene complexity and real-time camera effects.
+    </p>
+    <div class="hero-actions reveal" style="margin-bottom:56px;">
+      <a href="https://github.com/Rach0o0/Rendering-class" class="btn btn-ghost" target="_blank" rel="noopener">↗ Rendering-class repo</a>
+      <a href="rendering-journal/project.html" class="btn btn-ghost" target="_blank" rel="noopener">↗ Full project write-up</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider-line"></div></div>
+
+<!-- ========== COURSE B: POLYTECHNIQUE COMPUTER GRAPHICS ========== -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="subcase-tag reveal">02 · Computer Graphics (Polytechnique, C++)</div>
+    <h2 class="section-title reveal">A ray tracer from scratch, then a fluid simulator</h2>
+    <p class="section-sub reveal" style="max-width:720px;">
+      Two standalone C++ assignments across the semester: first, a full ray tracer built from the ground up; then a 2D free-surface fluid solver based on semi-discrete optimal transport, a very different, more mathematical corner of graphics.
+    </p>
+
+    <!-- Project 1: raytracer -->
+    <h3 class="reveal" style="font-size:20px; margin-bottom:8px;">Project 1 · A ray tracer from scratch</h3>
+    <p class="section-sub reveal" style="max-width:720px;">
+      Built lab by lab: ray-sphere intersection and Lambertian shadows, then recursive path tracing with mirror reflections and indirect lighting, Monte Carlo antialiasing and depth of field, triangle meshes loaded from .obj files, and finally a Bounding Volume Hierarchy to make it all fast.
+    </p>
+    <div class="shot-grid reveal" style="margin-bottom:28px;">
+      <div class="shot"><img src="../assets/graphics/td1_mirror.png" alt="Mirror reflections"><div class="cap">Mirror reflections, lab 2</div></div>
+      <div class="shot"><img src="../assets/graphics/td1_indirect.png" alt="Indirect lighting"><div class="cap">Indirect lighting via recursive path tracing</div></div>
+      <div class="shot"><img src="../assets/graphics/td1_cat.png" alt="Textured triangle mesh"><div class="cap">Triangle mesh with texture, lab 3</div></div>
+    </div>
+
+    <div class="eyebrow reveal">What BVH actually bought</div>
+    <p class="section-sub reveal" style="max-width:720px;">Same 512×512 final render (32 paths/pixel, max depth 5), three acceleration strategies:</p>
+    <div class="compare-grid reveal" style="margin-bottom:16px;">
+      <div class="compare-card">
+        <span class="cm-label">Naive mesh</span>
+        <div class="cm-value">12m43s</div>
+        <div class="cm-note">every triangle, every ray</div>
+      </div>
+      <div class="compare-card">
+        <span class="cm-label">Bounding box</span>
+        <div class="cm-value">2m37s</div>
+        <div class="cm-note">~5× faster</div>
+      </div>
+      <div class="compare-card best">
+        <span class="cm-label">BVH</span>
+        <div class="cm-value">5.9s</div>
+        <div class="cm-note">~130× faster than naive</div>
+      </div>
+      <div class="compare-card">
+        <span class="cm-label">Final scene</span>
+        <div class="cm-value best-shot"><img src="../assets/graphics/td1_final_scene.png" alt="Final BVH-accelerated render" style="width:100%; border-radius:8px; margin-top:4px;"></div>
+      </div>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:56px;">
+      Going from a naive per-triangle check to a Bounding Volume Hierarchy, triangles recursively split along the longest axis of their bounding box, cut the final render from nearly 13 minutes to under 6 seconds, without changing a single pixel of the output.
+    </p>
+
+    <!-- Project 2: fluid sim -->
+    <h3 class="reveal" style="font-size:20px; margin-bottom:8px;">Project 2 · Fluid simulation via optimal transport</h3>
+    <p class="section-sub reveal" style="max-width:720px;">
+      A 2D incompressible free-surface fluid solver: each particle owns a Laguerre cell whose area is tied to a target fluid volume, and semi-discrete optimal transport, solved with L-BFGS, keeps those areas correct as the fluid moves.
+    </p>
+    <div class="approach-steps reveal" style="margin-bottom:28px;">
+      <div class="approach-step">
+        <span class="anum">01</span>
+        <div><h3>Voronoi diagram</h3><p>Cells built by clipping the unit square against bisectors (Sutherland–Hodgman), parallelized with OpenMP. Verified on 100 random sites: total cell area = 1.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">02</span>
+        <div><h3>Power diagram + L-BFGS</h3><p>Weighted sites turn the Voronoi diagram into a power diagram; L-BFGS then adjusts weights so each cell's area matches a target: the discrete side of semi-discrete optimal transport.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">03</span>
+        <div><h3>Free-surface fluid</h3><p>An extra "air" weight leaves room for a free surface. Each step recomputes Laguerre cells, pulls particles toward their cell centroid with a spring force, and applies gravity.</p></div>
+      </div>
+    </div>
+    <div class="shot-grid reveal" style="margin-bottom:20px;">
+      <div class="shot"><img src="../assets/graphics/td3_voronoi.png" alt="Voronoi diagram, 100 sites"><div class="cap">Voronoi diagram, 100 random sites, lab 6</div></div>
+      <div class="shot"><img src="../assets/graphics/td3_fluid.png" alt="Initial fluid setup"><div class="cap">Initial fluid cells, target volume 0.4, measured 0.400184</div></div>
+      <div class="shot wide">
+        <video src="../assets/graphics/td3_fluid_sim.mp4" controls muted loop playsinline></video>
+        <div class="cap">1,000-step simulation, 100 particles settling under gravity</div>
+      </div>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:40px;">
+      The result: fluid mass gradually accumulates at the bottom of the domain under gravity while each particle's cell keeps roughly the same area throughout: exactly the incompressibility the method is designed to enforce.
+    </p>
+    <div class="hero-actions reveal">
+      <a href="https://github.com/Rach0o0/Graphics_TD1" class="btn btn-ghost" target="_blank" rel="noopener">↗ Graphics_TD1 repo</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal">
+    <div class="contact-card">
+      <h2>Want the full write-ups?</h2>
+      <p>Both courses are fully documented on GitHub, worksheets, reports, and source code included.</p>
+      <div class="contact-actions">
+        <a href="https://github.com/Rach0o0/Rendering-class" class="btn btn-primary" target="_blank" rel="noopener">↗ Rendering repo</a>
+        <a href="https://github.com/Rach0o0/Graphics_TD1" class="btn btn-primary" target="_blank" rel="noopener">↗ Graphics repo</a>
+        <a href="../index.html#projects" class="btn btn-ghost">← Back to projects</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Rachid Tazi</footer>
+
+<script>
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => root.classList.toggle('dark'));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

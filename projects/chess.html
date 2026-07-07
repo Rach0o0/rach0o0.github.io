@@ -1,58 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chess Move Predictor</title>
-    <!-- Re‑use main stylesheet and JS -->
-    <link rel="stylesheet" href="../styles/style.css" />
-  </head>
-  <body>
-    <header>
-      <nav id="navbar" class="container">
-        <a href="../index.html" class="logo">RachidTazi<span class="accent">.</span></a>
-        <button id="nav-toggle" aria-label="Toggle navigation">
-          <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-          <li><a href="../index.html#projects">← Back to portfolio</a></li>
-          <li><button id="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-        </ul>
-      </nav>
-    </header>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess Engine in C++ | Rachid Tazi</title>
+<meta name="description" content="A bitboard-based chess engine in C++ with alpha-beta search, Zobrist hashing, move ordering, and an opening book.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .hero-case{ min-height:auto; padding-top:140px; padding-bottom:20px; }
+  .hero-case .corner{ top:100px; }
+  .code-block{ background:var(--ink); color:#B8E6C1; font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:20px 24px; border-radius:14px; overflow-x:auto; line-height:1.7; }
+  .code-block .c-muted{ color:#6b7280; }
+  .code-block .c-key{ color:#7dd3fc; }
+  .perft-table{ width:100%; border-collapse:collapse; font-family:'JetBrains Mono',monospace; font-size:12.5px; }
+  .perft-table th, .perft-table td{ padding:10px 14px; text-align:right; border-bottom:1px solid var(--line); }
+  .perft-table th:first-child, .perft-table td:first-child{ text-align:left; color:var(--muted); }
+  .perft-table th{ color:var(--muted); font-weight:500; text-transform:uppercase; font-size:10.5px; letter-spacing:0.05em; }
+  .perft-table td.hl{ color:var(--accent); font-weight:600; }
+</style>
+</head>
+<body>
 
-    <main class="container section">
-      <h1 class="accent">Chess Move Predictor</h1>
-      <p class="subtitle"><!-- One‑line project tagline --> </p>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-      <!-- Screenshot or GIF -->
-      <img src="../images/chessboard.png" alt="Project preview" style="max-width:30%;border-radius:0.5rem;box-shadow:0 4px 10px rgba(0,0,0,0.1);" />
+<nav class="nav-pill">
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#skills">Skills</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#experience">Journey</a>
+  <a href="../index.html#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
 
-      <h2>Description</h2>
-      <p>This project is a C++ program that simulates a chess player capable of predicting its next move.<br>
-        Developed in a team of four, we implemented multiple techniques to evaluate and select the best move, including:<br>
-        Project made with Youssef Seghrouchni, Siyuan Lu and Ayoub Agouzoul.
+<header class="hero hero-case">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <a href="../index.html#projects" class="back-link reveal">← Back to portfolio</a>
+    <div class="eyebrow reveal">Case study 04 · Systems / C++</div>
+    <h1 class="reveal" style="font-size:clamp(32px,5.2vw,56px); max-width:900px;">A chess engine, from minimax to bitboards</h1>
+    <p class="lead reveal" style="max-width:700px;">A four-person C++ project building a chess engine from the ground up: legal move generation, search, evaluation, and an opening book, pushed from a naive prototype to a genuinely fast bitboard engine.</p>
+    <div class="case-meta reveal">
+      <div class="meta-chip"><span class="k">Language</span><span class="v">C++</span></div>
+      <div class="meta-chip"><span class="k">Team size</span><span class="v">4 people</span></div>
+      <div class="meta-chip"><span class="k">Core techniques</span><span class="v">Bitboards, α-β, Zobrist</span></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:40px;">
+  <div class="wrap">
+    <div class="eyebrow reveal">Team</div>
+    <div class="role-row reveal" style="margin-bottom:48px;">
+      <div class="role-chip"><span class="rn">Siyuan Lu</span><span class="rt">Core structures · legal move generation · minimax</span></div>
+      <div class="role-chip"><span class="rn">Ayoub Agouzoul</span><span class="rt">Alpha-beta · bitboard migration</span></div>
+      <div class="role-chip"><span class="rn">Youssef Seghrouchni</span><span class="rt">Piece classes · evaluation &amp; piece-square tables</span></div>
+      <div class="role-chip me"><span class="rn">Rachid (me)</span><span class="rt">Git setup · pawns/knights/promotion · opening book · move ordering</span></div>
+    </div>
+
+    <div class="eyebrow reveal">Evolution</div>
+    <h2 class="section-title reveal">From a random-move bot to a real engine</h2>
+    <p class="section-sub reveal" style="max-width:720px;">The engine wasn't built in one shot. It went through clear stages, each one driven by a concrete bottleneck the team hit.</p>
+
+    <div class="approach-steps reveal" style="margin-bottom:56px;">
+      <div class="approach-step">
+        <span class="anum">01</span>
+        <div><h3>Legal moves &amp; a random-move bot</h3><p>Starting from a king-only board, the team built out piece logic, castling, en passant, and promotion, then had the engine play legal random moves as a first milestone.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">02</span>
+        <div><h3>Minimax → alpha-beta pruning</h3><p>A first minimax search worked but was slow. Switching to alpha-beta pruning cut the search tree dramatically without changing the result: the same best move, reached much faster.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">03</span>
+        <div><h3>Migrating to bitboards</h3><p>Profiling showed the array-based board representation was the bottleneck. Rewriting piece storage and move generation around 64-bit bitboards sped up move generation by roughly <strong>5–10×</strong>.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">04</span>
+        <div><h3>Zobrist hashing &amp; move ordering</h3><p>A compile-time-generated Zobrist hash table (built from an LFSR at compile time) gives every position a near-unique 64-bit key. Combined with MVV-LVA capture ordering, killer moves, and principal-variation-first ordering, the search explores far fewer bad branches before finding good moves.</p></div>
+      </div>
+      <div class="approach-step">
+        <span class="anum">05</span>
+        <div><h3>Opening book</h3><p>My part: translating an external openings database into a lookup table mapping board positions to strong opening moves, via a Python preprocessing script, so the engine doesn't have to search the most well-known openings from scratch.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider-line"></div></div>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="eyebrow reveal">Under the hood</div>
+    <h2 class="section-title reveal">A few implementation details</h2>
+
+    <h3 class="reveal" style="font-size:18px; margin-bottom:10px;">Negamax with quiescence search</h3>
+    <p class="section-sub reveal" style="max-width:720px;">
+      Search is a negamax variant with alpha-beta pruning, extended with quiescence search at leaf nodes to avoid misjudging positions mid-capture-sequence. A time-limited search mode uses <code>setjmp</code>/<code>longjmp</code> to cleanly abort deep searches once the time budget runs out, always returning the best move found so far.
+    </p>
+    <div class="code-block reveal" style="margin-bottom:40px;">
+namespace Search {<br>
+&nbsp;&nbsp;int Quiesce(Board &amp;board, int alpha, int beta, PV &amp;pv);<br>
+&nbsp;&nbsp;int Negamax(Board &amp;board, int alpha, int beta, int depth,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int searchDepth, PV &amp;pv, SearchLimit *limit);<br>
+&nbsp;&nbsp;BitMove BestMoveTime(Board &amp;board, int time_limit);<br>
+}
+    </div>
+
+    <h3 class="reveal" style="font-size:18px; margin-bottom:10px;">Tapered evaluation</h3>
+    <p class="section-sub reveal" style="max-width:720px;">
+      The evaluation function doesn't use fixed piece-square tables. Instead, it computes a <strong>game phase</strong> from remaining material, then blends middlegame and endgame piece-square values accordingly. A king that's well-protected in the middlegame should push toward the center in the endgame, and the tapered evaluation captures that transition smoothly instead of switching abruptly.
     </p>
 
-      <h2>Key Features</h2>
-      <ul>
-        <li>Best Alpha-Beta pruning algorithm</li>
-        <li>Opening move database</li>
-        <li>Full implementation of all official chess rules</li>
-      </ul>
+    <h3 class="reveal" style="font-size:18px; margin-bottom:10px;">Move ordering: MVV-LVA</h3>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:40px;">
+      Alpha-beta pruning is only as good as the order moves are searched in. I implemented <strong>MVV-LVA</strong> (Most Valuable Victim – Least Valuable Attacker) capture ordering, trying "queen takes pawn" before "pawn takes queen", on top of killer-move and principal-variation-first ordering, so the search finds strong moves earlier and prunes more of the tree.
+    </p>
 
-      <h2>Repository & Demo</h2>
-      <p>
-        <a href="https://gitlab.binets.fr/rachid.tazi/logic-and-proofs" class="btn primary" target="_blank">View Source Code</a>
-        <!-- Optional demo link -->
-        <!-- <a href="#" class="btn" target="_blank">Play Demo</a> -->
-      </p>
-    </main>
+    <div class="hero-actions reveal">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted);">Private repository, hosted on the school's internal GitLab</span>
+    </div>
+  </div>
+</section>
 
-    <footer class="container">
-      <p>© <span id="year"></span> Rachid Tazi</p>
-    </footer>
+<section>
+  <div class="wrap reveal">
+    <div class="contact-card">
+      <h2>Curious how it plays?</h2>
+      <p>The engine reads a move history file and outputs its next move, built to be dropped into any UCI-style harness.</p>
+      <div class="contact-actions">
+        <a href="../index.html#projects" class="btn btn-ghost">← Back to projects</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="../js/script.js"></script>
-  </body>
+<footer>© 2026 Rachid Tazi</footer>
+
+<script>
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => root.classList.toggle('dark'));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
 </html>

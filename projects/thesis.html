@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generative AI for Physically-Based Scenes in Unity | Rachid Tazi</title>
+<meta name="description" content="Bachelor Thesis, École Polytechnique. Exploring text-based generative AI to automate physically-based scene configuration in Unity 3D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .hero-case{ min-height:auto; padding-top:140px; padding-bottom:20px; }
+  .hero-case .corner{ top:100px; }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-pill">
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#skills">Skills</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#experience">Journey</a>
+  <a href="../index.html#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
+
+<header class="hero hero-case">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <a href="../index.html#projects" class="back-link reveal">← Back to portfolio</a>
+    <div class="eyebrow reveal">Case study 01 · Bachelor Thesis</div>
+    <h1 class="reveal" style="font-size:clamp(32px,5.2vw,56px); max-width:900px;">Exploring text-based generative AI for creating manipulable physically-based scenes in Unity 3D</h1>
+    <p class="lead reveal" style="max-width:700px;">A research project on whether large language models can automate the configuration of physical behaviour for 3D objects, from raw prompting to a fully iterative AI agent.</p>
+    <div class="case-meta reveal">
+      <div class="meta-chip"><span class="k">School</span><span class="v">École Polytechnique</span></div>
+      <div class="meta-chip"><span class="k">Advisor</span><span class="v">Marie-Paule Cani</span></div>
+      <div class="meta-chip"><span class="k">Year</span><span class="v">2025 / 2026</span></div>
+      <div class="meta-chip"><span class="k">Field</span><span class="v">Computer Graphics / AI</span></div>
+    </div>
+    <div class="hero-actions reveal">
+      <a href="thesis.pdf" class="btn btn-primary" target="_blank" rel="noopener">⬇ Read the full thesis (PDF)</a>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:40px;">
+  <div class="wrap reveal">
+    <div class="eyebrow">Abstract</div>
+    <div class="abstract-box">
+      This project explores to what extent text-based generative AI, such as ChatGPT, can help generate Unity C# scripts and automate the configuration of physically manipulable objects. A prompting pipeline was designed to turn textual discussion into working Unity scripts. Objects were organized into families and configured using predefined physical presets, and an AI agent was built to iteratively refine physical parameters. The results highlight both the promise and the current limits of LLMs for automated 3D scene generation.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Context</div>
+    <h2 class="section-title reveal">Why this matters</h2>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:32px;">
+      Giving 3D objects realistic physical behaviour in engines like Unity (correct colliders, mass, friction, bounciness) is traditionally a manual, experience-driven process. It's slow, and the parameters developers choose are often inconsistent from one object to the next. With LLMs increasingly capable at code generation, the question became: can generative AI reliably take over part of this configuration work, and how far can it go on its own?
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Approach</div>
+    <h2 class="section-title reveal">Five methods, compared</h2>
+    <p class="section-sub reveal">Rather than committing to a single technique, the project builds up in stages, each one addressing the weaknesses found in the last.</p>
+
+    <div class="diagram-wrap reveal" style="margin-bottom:40px;">
+      <svg viewBox="0 0 1080 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:'JetBrains Mono',monospace;">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"></path>
+          </marker>
+        </defs>
+        <line x1="95" y1="110" x2="985" y2="110" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 6"></line>
+        <!-- step 1 -->
+        <g>
+          <circle cx="95" cy="110" r="34" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></circle>
+          <text x="95" y="116" text-anchor="middle" font-size="20" fill="var(--ink)">1</text>
+          <text x="95" y="168" text-anchor="middle" font-size="11" fill="var(--muted)">Manual</text>
+          <text x="95" y="182" text-anchor="middle" font-size="11" fill="var(--muted)">setup</text>
+        </g>
+        <g>
+          <circle cx="315" cy="110" r="34" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></circle>
+          <text x="315" y="116" text-anchor="middle" font-size="20" fill="var(--ink)">2</text>
+          <text x="315" y="168" text-anchor="middle" font-size="11" fill="var(--muted)">Direct LLM</text>
+          <text x="315" y="182" text-anchor="middle" font-size="11" fill="var(--muted)">generation</text>
+        </g>
+        <g>
+          <circle cx="535" cy="110" r="34" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></circle>
+          <text x="535" y="116" text-anchor="middle" font-size="20" fill="var(--ink)">3</text>
+          <text x="535" y="168" text-anchor="middle" font-size="11" fill="var(--muted)">Structured</text>
+          <text x="535" y="182" text-anchor="middle" font-size="11" fill="var(--muted)">prompt template</text>
+        </g>
+        <g>
+          <circle cx="755" cy="110" r="34" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></circle>
+          <text x="755" y="116" text-anchor="middle" font-size="20" fill="var(--ink)">4</text>
+          <text x="755" y="168" text-anchor="middle" font-size="11" fill="var(--muted)">Family scripts</text>
+          <text x="755" y="182" text-anchor="middle" font-size="11" fill="var(--muted)">+ presets</text>
+        </g>
+        <g>
+          <circle cx="985" cy="110" r="38" fill="var(--ink)" stroke="var(--accent)" stroke-width="2"></circle>
+          <text x="985" y="117" text-anchor="middle" font-size="20" fill="var(--bg)">5</text>
+          <text x="985" y="172" text-anchor="middle" font-size="11" fill="var(--accent)">Iterative</text>
+          <text x="985" y="186" text-anchor="middle" font-size="11" fill="var(--accent)">AI agent</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="approach-steps">
+      <div class="approach-step reveal">
+        <span class="anum">01</span>
+        <div><h3>Manual Unity setup</h3><p>Configuring colliders, Rigidbody, and physics materials by hand, the qualitative baseline everything else is measured against.</p></div>
+      </div>
+      <div class="approach-step reveal">
+        <span class="anum">02</span>
+        <div><h3>Direct LLM generation</h3><p>Asking the model to write a full C# script from a mesh description. Fast, but colliders and physical parameters came out arbitrary and inconsistent, and the code sometimes failed to compile.</p></div>
+      </div>
+      <div class="approach-step reveal">
+        <span class="anum">03</span>
+        <div><h3>Structured prompt template</h3><p>Constraining the model with a fixed prompt structure improved consistency and collider placement, at the cost of needing several rounds of interaction per object.</p></div>
+      </div>
+      <div class="approach-step reveal">
+        <span class="anum">04</span>
+        <div><h3>Object family scripts &amp; presets</h3><p>Objects were grouped into families with reusable scripts and predefined physical presets. The model's role shrank to just picking the right parameters, giving far more stable results.</p></div>
+      </div>
+      <div class="approach-step reveal">
+        <span class="anum">05</span>
+        <div><h3>Iterative AI agent</h3><p>An agent that analyzes an object and proposes physical parameters as a structured JSON contract, then iterates on its own proposal across several passes.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Evaluation</div>
+    <h2 class="section-title reveal">How each method was judged</h2>
+    <p class="section-sub reveal">Every approach was assessed qualitatively against the same four criteria.</p>
+    <div class="criteria-grid">
+      <div class="criteria-card reveal"><span class="ck">Human effort</span><p>How much manual work was needed to reach a usable configuration.</p></div>
+      <div class="criteria-card reveal"><span class="ck">Runtime stability</span><p>Whether the simulation behaved reliably once running.</p></div>
+      <div class="criteria-card reveal"><span class="ck">Physical plausibility</span><p>Whether the object's behaviour looked physically credible.</p></div>
+      <div class="criteria-card reveal"><span class="ck">Collider quality</span><p>For auto-generated colliders, how closely they matched the mesh.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Gallery</div>
+    <h2 class="section-title reveal">What it actually looked like</h2>
+    <p class="section-sub reveal">A few snapshots from across the project, from the first manual Unity scene to the final agent-assisted world.</p>
+    <div class="shot-grid reveal">
+      <div class="shot wide"><img src="../assets/thesis/virtual_world.png" alt="Final small interactive virtual world"><div class="cap">The final small interactive virtual world, assembled from family-scripted objects</div></div>
+      <div class="shot"><img src="../assets/thesis/game.png" alt="First manual Unity scene"><div class="cap">An early manually configured Unity scene</div></div>
+      <div class="shot"><img src="../assets/thesis/rock_mesh_collider.png" alt="Rock with mesh collider"><div class="cap">A rock object using a mesh collider preset</div></div>
+      <div class="shot"><img src="../assets/thesis/bouncy_ball.gif" alt="Bouncy ball physical preset animation"><div class="cap">A bouncy ball preset in motion</div></div>
+      <div class="shot"><img src="../assets/thesis/agent_architecture.png" alt="AI agent architecture diagram"><div class="cap">The iterative AI agent's architecture</div></div>
+      <div class="shot"><img src="../assets/thesis/agent_iterations.png" alt="Agent output across iterations"><div class="cap">The agent refining a collider proposal across iterations</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Findings</div>
+    <h2 class="section-title reveal">What actually worked</h2>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:8px;">
+      Direct LLM generation turned out to be a misleading shortcut: quick, but the arbitrary parameters usually needed the same manual fixing as starting from scratch. Structuring the prompts helped, but stayed slow. The clearest win was the hybrid approach, splitting objects into families with reusable scripts and letting the model only choose presets. That combination was stable enough to assemble a small interactive virtual world. The iterative agent, while still early stage, showed real promise: it consistently produced valid, structured proposals and improved them across iterations.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Future work</div>
+    <h2 class="section-title reveal">Where this could go next</h2>
+    <div class="future-list">
+      <div class="future-item reveal"><div class="fi-dot"></div><p>Benchmark several LLMs against each other to identify which performs best for this specific task.</p></div>
+      <div class="future-item reveal"><div class="fi-dot"></div><p>Run the iterative agent on more powerful compute to allow more refinement passes and more meaningful results.</p></div>
+      <div class="future-item reveal"><div class="fi-dot"></div><p>Extend the agent to generate skeleton structures for branching objects like trees, with geometric constraints guiding joint placement.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal">
+    <div class="contact-card">
+      <h2>Curious about the full write-up?</h2>
+      <p>The complete thesis covers the Unity fundamentals, related work, and full implementation, including the agent's source code in the appendix.</p>
+      <div class="contact-actions">
+        <a href="thesis.pdf" class="btn btn-primary" target="_blank" rel="noopener">⬇ Download the PDF</a>
+        <a href="../index.html#projects" class="btn btn-ghost">← Back to projects</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Rachid Tazi</footer>
+
+<script>
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => root.classList.toggle('dark'));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

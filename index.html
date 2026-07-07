@@ -1,72 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio • Rachid Tazi</title>
-    <link rel="stylesheet" href="styles/style.css" />
-  </head>
-  <body>
-    <header>
-      <nav id="navbar" class="container">
-        <a href="#" class="logo">RachidTazi<span class="accent">.</span></a>
-        <button id="nav-toggle" aria-label="Toggle navigation">
-          <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><button id="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-        </ul>
-      </nav>
-    </header>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rachid Tazi | Portfolio</title>
+<meta name="description" content="Rachid Tazi, Computer Science student specializing in Computer Graphics and AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <main>
-      <section id="hero" class="container">
-        <h1>Hello, I'm <span class="accent">Rachid Tazi</span></h1>
-        <p class="subtitle">
-          Bachelor student in mathematics and computer science at École Polytechnique, Paris.
-          Passionate about everything related to computing.
-        </p>
-        <a href="https://github.com/Rach0o0/Portfolio/tree/main" class="btn primary">View my projects</a>
-      </section>
+<div id="boot">
+  <div class="boot-line">&gt; INITIALIZING PORTFOLIO...</div>
+  <div class="boot-line">&gt; LOADING PROJECTS...</div>
+  <div class="boot-line">&gt; READY.</div>
+  <div class="bar"><div class="bar-fill"></div></div>
+</div>
 
-      <section id="about" class="container section">
-        <h2>About</h2>
-        <p>
-          I'm a 20-year-old student from Morocco, currently enrolled in the Bachelor program at
-          École Polytechnique in Paris, where I study mathematics and computer science. I use this
-          website to showcase the various projects I'm involved in — from academic work to personal
-          experiments and collaborations. This site is regularly updated as I continue to explore
-          new technologies and ideas.
-        </p>
-      </section>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-      <section id="projects" class="container section">
-        <h2>Projects</h2>
+<nav class="nav-pill">
+  <a href="#about">About</a>
+  <a href="#skills">Skills</a>
+  <a href="#projects">Projects</a>
+  <a href="#experience">Journey</a>
+  <a href="#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
 
-        <!-- Slide counter -->
-        <div id="slide-counter" class="slide-counter">1 / 6</div>
+<header class="hero">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="scanline"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <div class="status-line mono"><span class="dot"></span> AVAILABLE FOR NEW OPPORTUNITIES</div>
+    <h1>Rachid Tazi<br><span>Student in Computer Science</span></h1>
+    <p class="lead">I'm a first-year Master's student in Visual and Creative AI at École Polytechnique, specializing in Computer Graphics and AI. This portfolio brings together my projects, my journey, and the tools I use every day.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">See my projects →</a>
+      <a href="assets/CV_Rachid_Tazi.pdf" class="btn btn-ghost" target="_blank" rel="noopener">⬇ Download CV</a>
+    </div>
+  </div>
+  <div class="console mono">
+    <div class="row"><span class="label">STATUS</span><span class="val live">ONLINE</span></div>
+    <div class="row"><span class="label">BASE</span><span class="val">FRANCE</span></div>
+    <div class="row"><span class="label">FOCUS</span><span class="val">GRAPHICS / AI</span></div>
+    <div class="row"><span class="label">LOCAL TIME</span><span class="val" id="clock">--:--:--</span></div>
+  </div>
+</header>
 
-        <!-- Project cards will be dynamically inserted here -->
-        <div id="projects-slider" class="container"></div>
-      </section>
+<section id="about">
+  <div class="wrap reveal">
+    <div class="eyebrow">Profile</div>
+    <h2 class="section-title">A bit more about me</h2>
+    <p class="section-sub">I hold a Bachelor's degree in Mathematics and Computer Science, which gave me broad, solid general knowledge across the field. I love work that mixes focus, creativity, and producing tangible visual results, and I enjoy getting involved in hands-on projects. I'm now specializing in Computer Graphics and AI.</p>
+  </div>
+</section>
 
-      <section id="skills" class="container section">
-        <h2>Skills</h2>
-        <ul id="skills-list" class="skills-list">
-          <!-- Skills will be dynamically inserted by script.js -->
-        </ul>
-      </section>
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow reveal">Skills</div>
+    <h2 class="section-title reveal">Tools I work with</h2>
+    <p class="section-sub reveal">A quick overview of the technologies I use.</p>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <h3>Web</h3>
+        <p>Core building blocks for the web.</p>
+        <div class="chip-row"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Programming</h3>
+        <p>General-purpose languages I use daily.</p>
+        <div class="chip-row"><span class="chip">Python</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Git</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Machine Learning</h3>
+        <p>Building and training models.</p>
+        <div class="chip-row"><span class="chip">TensorFlow</span><span class="chip">PyTorch</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Computer Graphics</h3>
+        <p>Rendering, from shaders to real-time pipelines.</p>
+        <div class="chip-row"><span class="chip">WGSL</span><span class="chip">C++</span><span class="chip">JavaScript</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <h3>Game Dev</h3>
+        <p>Interactive 3D applications.</p>
+        <div class="chip-row"><span class="chip">Unity</span><span class="chip">C#</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    </main>
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow reveal">Projects</div>
+    <h2 class="section-title reveal">A selection of my work</h2>
+    <p class="section-sub reveal">Filter by technology to explore. Placeholders below, to be replaced with real projects.</p>
 
-    <footer class="container">
-      <p>© <span id="year"></span> Rachid Tazi. All rights reserved.</p>
-    </footer>
+    <div class="filters reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ai">AI</button>
+      <button class="filter-btn" data-filter="graphics">Graphics</button>
+      <button class="filter-btn" data-filter="systems">Systems</button>
+      <button class="filter-btn" data-filter="cpp">C++</button>
+    </div>
 
-    <script src="js/script.js"></script>
-  </body>
+    <div class="projects-grid" id="projectsGrid">
+      <a href="projects/thesis.html" class="project-card large reveal" data-tags="ai graphics" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">01 / FEATURED</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Bachelor Thesis: Generative AI for Unity scenes</h3>
+          <p>Exploring how far text-based generative AI can go in automating physically-based object configuration in Unity 3D, from raw prompting to a full iterative AI agent.</p>
+          <div class="chip-row"><span class="chip">LLMs</span><span class="chip">Unity / C#</span><span class="chip">Agents</span></div>
+        </div>
+      </a>
+      <a href="projects/machine-learning.html" class="project-card small reveal" data-tags="ai" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">02 / CASE STUDY</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Machine Learning projects</h3>
+          <p>Audio classification on ESC-50 (CNN vs. transfer learning) and vessel trajectory forecasting on AIS data.</p>
+          <div class="chip-row"><span class="chip">TensorFlow</span><span class="chip">PyTorch</span><span class="chip">OpenL3</span></div>
+        </div>
+      </a>
+      <a href="projects/graphics.html" class="project-card small reveal" data-tags="graphics" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">03 / CASE STUDY</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Computer Graphics coursework</h3>
+          <p>A WebGPU ray tracer with cinematic camera effects (DTU), and a C++ ray tracer + fluid simulation via optimal transport (Polytechnique).</p>
+          <div class="chip-row"><span class="chip">WGSL</span><span class="chip">C++</span><span class="chip">BVH</span></div>
+        </div>
+      </a>
+      <a href="projects/chess.html" class="project-card small reveal" data-tags="cpp" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">04 / CASE STUDY</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Chess engine</h3>
+          <p>A bitboard-based C++ chess engine with alpha-beta search, Zobrist hashing, move ordering, and an opening book.</p>
+          <div class="chip-row"><span class="chip">C++</span><span class="chip">Bitboards</span></div>
+        </div>
+      </a>
+      <a href="projects/systems.html" class="project-card small reveal" data-tags="systems" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">05 / CASE STUDY</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Concurrent reverse-hashing server</h3>
+          <p>A multithreaded C server that brute-forces SHA-256 preimages under load, with a custom cache and a hybrid priority scheduler.</p>
+          <div class="chip-row"><span class="chip">C</span><span class="chip">pthreads</span></div>
+        </div>
+      </a>
+      <a href="projects/falling-sand.html" class="project-card large reveal" data-tags="graphics cpp" style="cursor:none;">
+        <div class="hud tl"></div><div class="hud br"></div>
+        <div class="project-top">
+          <span class="project-index">06 / CASE STUDY</span>
+          <span class="project-link">↗</span>
+        </div>
+        <div>
+          <h3>Falling sand game: GPU compute in Godot</h3>
+          <p>A cellular-automaton sand simulation with the physics running as a GLSL compute shader: 65,536 cells updated in parallel on the GPU, with an automatic CPU fallback.</p>
+          <div class="chip-row"><span class="chip">Godot 4</span><span class="chip">C++ / GDExtension</span><span class="chip">GLSL compute</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow reveal">Journey</div>
+    <h2 class="section-title reveal">Experience & education</h2>
+    <p class="section-sub reveal">My academic and research path so far.</p>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="tl-date">JAN–MAR 2026</span>
+        <h3>Bachelor Thesis Internship: VISTA Team, Inria</h3>
+        <div class="role">Research internship, École Polytechnique</div>
+        <p>Explored how generative AI can be used to create interactive and realistic characteristics for 3D objects in Unity.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-date">SPRING 2025</span>
+        <h3>Exchange Semester: DTU</h3>
+        <div class="role">Technical University of Denmark</div>
+        <p>Coursework focused on Rendering, Deep Learning, and Operating Systems.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-date">2023–2026</span>
+        <h3>Bachelor of Science</h3>
+        <div class="role">École Polytechnique</div>
+        <p>Dual major in Advanced Mathematics &amp; Computer Science.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap reveal">
+    <div class="contact-card">
+      <h2>Let's talk about your next project</h2>
+      <p>Open to internships, research opportunities, and collaborations.</p>
+      <div class="contact-actions">
+        <a href="mailto:rachidtazi2005@gmail.com" class="btn btn-primary">Send an email</a>
+        <a href="https://www.linkedin.com/in/rachid-tazi/" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/Rach0o0" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Rachid Tazi</footer>
+
+<script>
+  // Boot sequence
+  window.addEventListener('load', () => {
+    setTimeout(() => { document.getElementById('boot').classList.add('hide'); }, 1500);
+  });
+
+  // Custom cursor
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .skill-card, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  // Live clock
+  const clockEl = document.getElementById('clock');
+  function tick(){ clockEl.textContent = new Date().toLocaleTimeString('fr-FR'); }
+  tick(); setInterval(tick, 1000);
+
+  // Theme toggle (état en mémoire, pas de localStorage)
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    root.classList.toggle('dark');
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Project filters
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(card => {
+        const tags = card.dataset.tags;
+        card.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
 </html>

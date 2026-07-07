@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concurrent Reverse-Hashing Server | Rachid Tazi</title>
+<meta name="description" content="A multithreaded C server that brute-forces SHA-256 preimages under concurrent client load, with a custom cache and priority scheduler.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .hero-case{ min-height:auto; padding-top:140px; padding-bottom:20px; }
+  .hero-case .corner{ top:100px; }
+  .code-block{ background:var(--ink); color:#B8E6C1; font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:20px 24px; border-radius:14px; overflow-x:auto; line-height:1.7; }
+  .formula-box{ background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:16px; padding:24px 28px; font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--ink); }
+  .sched-table{ width:100%; border-collapse:collapse; font-size:13px; }
+  .sched-table th, .sched-table td{ padding:12px 14px; text-align:left; border-bottom:1px solid var(--line); }
+  .sched-table th{ color:var(--muted); font-weight:500; text-transform:uppercase; font-size:10.5px; letter-spacing:0.05em; font-family:'JetBrains Mono',monospace; }
+  .sched-table td.name{ font-weight:600; }
+  .sched-table tr.best td{ color:var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-pill">
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#skills">Skills</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#experience">Journey</a>
+  <a href="../index.html#contact">Contact</a>
+  <div class="nav-toggle" id="themeToggle" title="Toggle theme">◐</div>
+</nav>
+
+<header class="hero hero-case">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="orb"></div>
+  <div class="wrap">
+    <a href="../index.html#projects" class="back-link reveal">← Back to portfolio</a>
+    <div class="eyebrow reveal">Case study 05 · Systems / C</div>
+    <h1 class="reveal" style="font-size:clamp(32px,5.2vw,56px); max-width:900px;">A concurrent server that races against SHA-256</h1>
+    <p class="lead reveal" style="max-width:700px;">An Operating Systems course challenge: build a multithreaded server that finds SHA-256 preimages inside a given range, as fast as possible, under real concurrent load, and prove which scheduling strategy handles that load best.</p>
+    <div class="case-meta reveal">
+      <div class="meta-chip"><span class="k">Language</span><span class="v">C, pthreads</span></div>
+      <div class="meta-chip"><span class="k">Course</span><span class="v">Operating Systems, DTU</span></div>
+      <div class="meta-chip"><span class="k">My focus</span><span class="v">Priority scheduling experiment</span></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:40px;">
+  <div class="wrap">
+    <div class="eyebrow reveal">The challenge</div>
+    <h2 class="section-title reveal">Reverse a hash, fast, under pressure</h2>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:40px;">
+      Clients send a SHA-256 hash, a numeric search range <code>[start, end)</code>, and a priority byte. The server has to brute-force which number in that range hashes to the given value, and answer as quickly as possible, while many clients hit it at once, each with different priorities, difficulties, and patience. The interesting part isn't the brute force itself; it's how the server stays fast and fair when it can't serve every request instantly.
+    </p>
+
+    <div class="eyebrow reveal">Architecture</div>
+    <h3 class="reveal" style="font-size:20px; margin-bottom:16px;">One accept loop, a shared priority queue, a pool of workers</h3>
+    <div class="diagram-wrap reveal" style="margin-bottom:20px;">
+      <svg viewBox="0 0 1080 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:'JetBrains Mono',monospace;">
+        <line x1="90" y1="110" x2="330" y2="110" stroke="var(--line)" stroke-width="2"></line>
+        <line x1="450" y1="110" x2="640" y2="110" stroke="var(--line)" stroke-width="2"></line>
+        <line x1="760" y1="70" x2="850" y2="45" stroke="var(--line)" stroke-width="2"></line>
+        <line x1="760" y1="110" x2="850" y2="110" stroke="var(--line)" stroke-width="2"></line>
+        <line x1="760" y1="150" x2="850" y2="175" stroke="var(--line)" stroke-width="2"></line>
+        <g>
+          <rect x="20" y="85" width="140" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="90" y="115" text-anchor="middle" font-size="11" fill="var(--ink)">TCP clients</text>
+        </g>
+        <g>
+          <rect x="220" y="85" width="140" height="50" rx="12" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="290" y="115" text-anchor="middle" font-size="11" fill="var(--ink)">Accept loop</text>
+        </g>
+        <g>
+          <rect x="450" y="80" width="190" height="60" rx="12" fill="var(--ink)" stroke="var(--accent)" stroke-width="2"></rect>
+          <text x="545" y="106" text-anchor="middle" font-size="11" fill="var(--bg)">Priority queue</text>
+          <text x="545" y="124" text-anchor="middle" font-size="9.5" fill="var(--accent)">score = f(prio, difficulty, age)</text>
+        </g>
+        <g>
+          <rect x="850" y="20" width="150" height="45" rx="10" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="925" y="47" text-anchor="middle" font-size="10.5" fill="var(--ink)">Worker thread 1</text>
+        </g>
+        <g>
+          <rect x="850" y="87" width="150" height="45" rx="10" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="925" y="114" text-anchor="middle" font-size="10.5" fill="var(--ink)">Worker thread 2</text>
+        </g>
+        <g>
+          <rect x="850" y="152" width="150" height="45" rx="10" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"></rect>
+          <text x="925" y="179" text-anchor="middle" font-size="10.5" fill="var(--ink)">Worker thread N</text>
+        </g>
+      </svg>
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:16px;">
+      Each worker pulls the highest-scoring request, checks a custom hash cache first, and only falls back to brute force if it's a miss. Cache buckets are aligned to 64 bytes to sit cleanly on a cache line, and results are shared across all workers behind a mutex, so once one client's hash has been cracked, every future identical request is instant.
+    </p>
+    <div class="code-block reveal" style="margin-bottom:56px;">
+found = cache_get(&amp;cache, hash64, req-&gt;hash, &amp;found_answer);<br>
+if (!found) {<br>
+&nbsp;&nbsp;found_answer = find_answer(req-&gt;hash, req-&gt;start, req-&gt;end, &amp;found);<br>
+&nbsp;&nbsp;if (found) cache_put(&amp;cache, hash64, req-&gt;hash, found_answer);<br>
+}
+    </div>
+
+    <div class="eyebrow reveal">My contribution</div>
+    <h3 class="reveal" style="font-size:20px; margin-bottom:8px;">Designing and testing the priority scheduler</h3>
+    <p class="section-sub reveal" style="max-width:720px;">
+      A plain FIFO queue ignores priority entirely, and a naive "always serve the highest priority" queue starves low-priority clients under load. I designed and benchmarked five scheduling strategies, then built a hybrid scorer that balances all three signals at once:
+    </p>
+    <div class="formula-box reveal" style="margin-bottom:16px;">
+      score(r) = α · priority_norm(r) − β · difficulty_norm(r) + γ · age_norm(r)
+    </div>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:32px;">
+      <code>α</code> isn't fixed: it scales up as the queue gets longer, so priority matters more precisely when the server is under real pressure. The <code>age_norm</code> term guarantees that no request waits forever, no matter how low its priority: the longer it sits in the queue, the more its score climbs.
+    </p>
+
+    <table class="sched-table reveal" style="margin-bottom:16px;">
+      <tr><th>Strategy</th><th>Behaviour</th></tr>
+      <tr><td class="name">FIFO (baseline)</td><td>Ignores priority entirely, pure arrival order.</td></tr>
+      <tr><td class="name">Strict priority</td><td>Highest priority always served first, fast, but risks starving low-priority clients.</td></tr>
+      <tr><td class="name">Weighted round robin</td><td>Priority sets service frequency, balanced and fair.</td></tr>
+      <tr><td class="name">Aging</td><td>Priority rises with wait time, no starvation, even under heavy load.</td></tr>
+      <tr class="best"><td class="name">Hybrid (mine)</td><td>Combines priority, difficulty, and age into one adaptive score, most responsive under stress.</td></tr>
+    </table>
+    <p class="section-sub reveal" style="max-width:720px; margin-bottom:56px;">
+      Each strategy was benchmarked across four priority distributions (from "no priority" to "strong priority"), plus dedicated difficulty, repetition, and load-stress tests, 10 runs each. The result was consistent: FIFO leaves performance on the table by ignoring priority, strict priority wins on latency but isn't fair, and the hybrid scheduler gave the best overall balance, especially once the server was under real stress.
+    </p>
+
+    <div class="hero-actions reveal">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted);">Team project, private repository, DTU GitLab</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal">
+    <a href="../index.html#projects" class="back-link" style="justify-content:center; display:flex;">← Back to projects</a>
+  </div>
+</section>
+
+<footer>© 2026 Rachid Tazi</footer>
+
+<script>
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  window.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('active'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeToggle').addEventListener('click', () => root.classList.toggle('dark'));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
